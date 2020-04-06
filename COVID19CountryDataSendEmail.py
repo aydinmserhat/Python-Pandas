@@ -10,10 +10,7 @@ df = pd.read_csv(url, index_col=0) ## read data as dataframe with pandas library
 tr = df.loc[df['Country']=='Turkey'] ## get data with respect to spesific country (if name of country == "Turkey") using .loc (boolean) method
 
 tr_diff = tr[:] # copy data set to change over it
-tr_diff['dC'] = tr_diff['Confirmed'].diff(1) ## add increment of confirmed case according to last 2 days. (subtraction of the last 2 rows)
-tr_diff['dR'] = tr_diff['Recovered'].diff(1) ## same for this  
-tr_diff['dD'] = tr_diff['Deaths'].diff(1) ## same for this
-
+tr_diff[['dC', 'dR', 'dD']] = tr_diff[['Confirmed', 'Recovered', 'Deaths']].diff(1) ## add increment of confirmed case according to last 2 days. (subtraction of the last 2 rows)
 
 def send_email(user, pwd, recipient, subject, body, cc=None, bcc=None): ## sen email function. Use smtplib for server connection.
     import smtplib
@@ -57,4 +54,4 @@ covid_text_last3days = "COVID-19 data for last 3 days of your country\n\n\n {}".
 covid_text_lastday = 'last day data ofs COVID-19 in your county\n\n\n' + 'dC, dR, dD: increment of each cases\n\n\n' + tr_diff.iloc[-1].to_string()
 print (covid_text_last3days)
 
-send_email('sender_email_adress', 'sender_password', 'recipient(s)', 'subject', text, None, None)
+#send_email('sender_email_adress', 'sender_password', 'recipient(s)', 'subject', text, None, None)
